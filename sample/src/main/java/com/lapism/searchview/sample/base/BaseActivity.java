@@ -233,6 +233,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                 public boolean onQueryTextSubmit(String query) {
                     //getData(query, 0);
                     // mSearchView.close(false);
+                    Toast.makeText(BaseActivity.this, query, Toast.LENGTH_LONG).show();
                     return true;
                 }
 

@@ -592,6 +592,7 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
         CharSequence query = mEditText.getText();
         if (query != null && TextUtils.getTrimmedLength(query) > 0) {
             if (mOnQueryChangeListener == null || !mOnQueryChangeListener.onQueryTextSubmit(query.toString())) {
+                mOnQueryChangeListener.onQueryTextSubmit(query.toString());
             }
         }
         close(true);
