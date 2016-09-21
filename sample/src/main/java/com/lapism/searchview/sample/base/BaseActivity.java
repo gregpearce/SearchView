@@ -234,15 +234,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             mSearchView.setHint(R.string.search);
             mSearchView.setTextSize(16);
             mSearchView.setHint("Search");
-            mSearchView.setDivider(false);
-            mSearchView.setVoice(true);
-            mSearchView.setVoiceText("Set permission on Android 6+ !");
             mSearchView.setAnimationDuration(SearchView.ANIMATION_DURATION);
             mSearchView.setShadowColor(ContextCompat.getColor(this, R.color.search_shadow_layout));
             mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    getData(query, 0);
+                    //getData(query, 0);
                     // mSearchView.close(false);
                     return true;
                 }
@@ -267,23 +264,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
                     }
                 }
             });
-
-            List<SearchItem> suggestionsList = new ArrayList<>();
-            suggestionsList.add(new SearchItem("search1"));
-            suggestionsList.add(new SearchItem("search2"));
-            suggestionsList.add(new SearchItem("search3"));
-
-            SearchAdapter searchAdapter = new SearchAdapter(this, suggestionsList);
-            searchAdapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    TextView textView = (TextView) view.findViewById(R.id.textView_item_text);
-                    String query = textView.getText().toString();
-                    getData(query, position);
-                    // mSearchView.close(false);
-                }
-            });
-            mSearchView.setAdapter(searchAdapter);
         }
     }
 
