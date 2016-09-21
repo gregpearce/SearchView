@@ -565,12 +565,11 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
 
     public void removeFocus() {
         mIsSearchOpen = false;
-        setHamburger();
         if (mShadow) {
             SearchAnimator.fadeOut(mShadowView, mAnimationDuration);
         }
         hideKeyboard();
-        hideClearTextIcon();
+        mEmptyImageView.setVisibility(View.GONE);
         if (mVersion != VERSION_MENU_ITEM) {
             postDelayed(new Runnable() {
                 @Override
@@ -595,7 +594,7 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
                 mOnQueryChangeListener.onQueryTextSubmit(query.toString());
             }
         }
-        close(true);
+        mEditText.clearFocus();
     }
 
     private void onTextChanged(CharSequence newText) {
@@ -629,7 +628,7 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
     }
 
     protected void setArrow() {
-        if (mSearchArrow != null) {
+        if (mSearchArrow != null && mIsSearchArrowHamburgerState != SearchArrowDrawable.STATE_ARROW) {
             mSearchArrow.setVerticalMirror(false);
             mSearchArrow.animate(SearchArrowDrawable.STATE_ARROW, mAnimationDuration);
             mIsSearchArrowHamburgerState = SearchArrowDrawable.STATE_ARROW;
@@ -637,7 +636,7 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
     }
 
     private void setHamburger() {
-        if (mSearchArrow != null) {
+        if (mSearchArrow != null && mIsSearchArrowHamburgerState != SearchArrowDrawable.STATE_HAMBURGER) {
             mSearchArrow.setVerticalMirror(true);
             mSearchArrow.animate(SearchArrowDrawable.STATE_HAMBURGER, mAnimationDuration);
             mIsSearchArrowHamburgerState = SearchArrowDrawable.STATE_HAMBURGER;
@@ -678,6 +677,8 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
                     }
                 }
                 if (mIsSearchArrowHamburgerState == SearchArrowDrawable.STATE_ARROW) {
+                    mEditText.getText().clear();
+                    setHamburger();
                     close(true);
                 }
             }
@@ -729,5 +730,14 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
 
     public interface OnMenuClickListener {
         void onMenuClick();
+    }
+
+    @Override protected Parcelable onSaveInstanceState() {
+        Parcelable parcelable = super.onSaveInstanceState();
+        return parcelable;
+    }
+
+    @Override protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
     }
 }
