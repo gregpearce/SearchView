@@ -568,6 +568,9 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
         if (mShadow) {
             SearchAnimator.fadeOut(mShadowView, mAnimationDuration);
         }
+        if (mEditText.getText().length() == 0) {
+            setHamburger();
+        }
         hideKeyboard();
         mEmptyImageView.setVisibility(View.GONE);
         if (mVersion != VERSION_MENU_ITEM) {
