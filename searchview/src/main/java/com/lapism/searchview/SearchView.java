@@ -733,11 +733,41 @@ public class SearchView extends FrameLayout implements View.OnClickListener {
     }
 
     @Override protected Parcelable onSaveInstanceState() {
-        Parcelable parcelable = super.onSaveInstanceState();
-        return parcelable;
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState savedState = new SavedState(superState);
+        savedState.viewResultsState = !mEditText.hasFocus() && mEditText.getText().length() > 0;
+        return savedState;
     }
 
     @Override protected void onRestoreInstanceState(Parcelable state) {
-        super.onRestoreInstanceState(state);
+        SavedState savedState = (SavedState) state;
+        if (savedState.viewResultsState) {
+            // basically all of the state of the view seems to be maintained fine without help
+            // the only bad state it can get into is when the search has happened and the results are
+            // being viewed, manually hack around this
+            setArrow();
+            mEmptyImageView.setVisibility(View.GONE);
+        }
+        super.onRestoreInstanceState(savedState.getSuperState());
+    }
+
+    private static class SavedState extends View.BaseSavedState {
+        boolean viewResultsState;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.viewResultsState = in.readInt() == 1;
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(viewResultsState ? 1 : 0);
+        }
+
     }
 }
