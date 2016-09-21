@@ -15,12 +15,8 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lapism.searchview.SearchAdapter;
-import com.lapism.searchview.SearchHistoryTable;
-import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
 import com.lapism.searchview.sample.R;
 import com.lapism.searchview.sample.activity.AboutActivity;
@@ -52,7 +48,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     protected Toolbar mToolbar = null;
 
     protected FloatingActionButton mFab = null;
-    private SearchHistoryTable mHistoryDatabase;
 
     // ---------------------------------------------------------------------------------------------
     @Override
@@ -162,7 +157,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             mFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mHistoryDatabase.clearDatabase();
                     Snackbar.make(v, "Search history deleted", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             });
@@ -225,8 +219,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
     }
 
     protected void setSearchView() {
-        mHistoryDatabase = new SearchHistoryTable(this);
-
         mSearchView = (SearchView) findViewById(R.id.searchView);
         if (mSearchView != null) {
             mSearchView.setVersion(SearchView.VERSION_TOOLBAR);
@@ -275,19 +267,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Navigati
             mSearchView.setTheme(extras.getInt(EXTRA_KEY_THEME), true);
             mSearchView.setText(extras.getString(EXTRA_KEY_TEXT));
         }
-    }
-
-    private void getData(String text, int position) {
-        mHistoryDatabase.addItem(new SearchItem(text));
-
-        Intent intent = new Intent(getApplicationContext(), ResultActivity.class);
-        intent.putExtra(EXTRA_KEY_VERSION, SearchView.VERSION_TOOLBAR_ICON);
-        intent.putExtra(EXTRA_KEY_VERSION_MARGINS, SearchView.VERSION_MARGINS_TOOLBAR_SMALL);
-        intent.putExtra(EXTRA_KEY_THEME, SearchView.THEME_LIGHT);
-        intent.putExtra(EXTRA_KEY_TEXT, text);
-        startActivity(intent);
-
-        Toast.makeText(getApplicationContext(), text + ", position: " + position, Toast.LENGTH_SHORT).show();
     }
 
     protected void setNightMode(@AppCompatDelegate.NightMode int nightMode) {
